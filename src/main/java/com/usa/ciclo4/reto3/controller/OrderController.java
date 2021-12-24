@@ -50,6 +50,23 @@ public class OrderController {
         return orderService.delete(id);
     }
 
+    //Reto 4: Ordenes de un asesor
+    @GetMapping("/salesman/{id}")
+    public List<Order> ordersSalesManByID(@PathVariable("id") int id) {
+        return orderService.ordersSalesManByID(id);
+    }
+
+    //Reto 4: Ordenes de un asesor x Fecha
+    @GetMapping("/date/{date}/{id}")
+    public List<Order> ordersSalesManByDate(@PathVariable("date") String date, @PathVariable("id") int id) {
+        return orderService.ordersSalesManByDate(date, id);
+    }
+
+    //Reto 4: Ordenes de un asesor x Estado
+    @GetMapping("/state/{state}/{id}")
+    public List<Order> ordersSalesManByState(@PathVariable("state") String date, @PathVariable("id") int id) {
+        return orderService.ordersSalesManByState(date, id);
+    }
 }
 
 

@@ -47,4 +47,33 @@ public class CleaningProductController {
         return cleaningProductService.delete(reference);
     }
 
+    @GetMapping("/category/{category}")
+    public List<CleaningProduct> gadgetsByCategory(@PathVariable("category") String category) {
+        return cleaningProductService.gadgetsByCategory(category);
+    }
+
+    //Reto 5
+    @GetMapping("/price/{precio}")
+    public List<CleaningProduct> gadgetsByPrice(@PathVariable("precio") double precio) {
+        return cleaningProductService.gadgetsByPrice(precio);
+    }
+
+    @GetMapping("/name/{name}")
+    public List<CleaningProduct> gadgetsByName(@PathVariable("name") String name) {
+        return cleaningProductService.gadgetsByName(name);
+    }
+
+    @GetMapping("/category")
+    public List<String> category() {
+        return cleaningProductService.getAllCategories();
+    }
+
+    //Reto 5
+    @GetMapping("/description/{description}")
+    public List<CleaningProduct> findByDescriptionLike(@PathVariable("description") String description) {
+        return cleaningProductService.findByDescriptionLike(description);
+    }
+
+
+
 }

@@ -29,15 +29,9 @@ public class OrderService {
 
     public Order save(Order order) {
         if (order.getId() == null) {
-            return orderRepository.save(order);
+            return order;
         } else {
-            Optional<Order> search = orderRepository.getOrder(order.getId());
-            if (search.isPresent()) {
-                return order;
-            } else {
-                return orderRepository.save(order);
-            }
-
+            return orderRepository.save(order);
         }
     }
 
@@ -45,19 +39,20 @@ public class OrderService {
         if (order.getId() != null) {
             Optional<Order> search = orderRepository.getOrder(order.getId());
             if (search.isPresent()) {
-                if (order.getRegisterDay() != null) {
-                    search.get().setRegisterDay(order.getRegisterDay());
-                }
                 if (order.getStatus() != null) {
                     search.get().setStatus(order.getStatus());
                 }
-                return orderRepository.save(search.get());
+                orderRepository.update(search.get());
+                return search.get();
             } else {
                 return order;
             }
+        } else {
+            return order;
         }
-        return order;
     }
+
+
 
     public boolean delete(Integer id){
         Boolean aBoolean = orderRepository.getOrder(id).map(order -> {
@@ -65,5 +60,19 @@ public class OrderService {
             return true;
         }).orElse(false);
         return aBoolean;
+    }
+
+    //Reto 4: Ordenes de un asesor
+    public List<Order> ordersSalesManByID(int id) {
+        return orderRepository.ordersSalesManByID(id);
+    }
+
+    //Reto 4: Ordenes de un asesor x Fecha
+    public List<Order> ordersSalesManByDate(String dateStr, int id) {
+        return orderRepository.ordersSalesManByDate(dateStr, id);
+    }
+    //Reto 4: Ordenes de un asesor x Estado
+    public List<Order> ordersSalesManByState(String state, Integer id) {
+        return orderRepository.ordersSalesManByState(state, id);
     }
 }

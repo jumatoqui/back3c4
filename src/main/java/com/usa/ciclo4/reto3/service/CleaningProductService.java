@@ -1,10 +1,15 @@
 package com.usa.ciclo4.reto3.service;
 
+import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.usa.ciclo4.reto3.model.CleaningProduct;
 import com.usa.ciclo4.reto3.repository.CleaningProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -12,6 +17,9 @@ public class CleaningProductService {
 
     @Autowired
     private CleaningProductRepository cleaningProductRepository;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     public List<CleaningProduct> getAll(){
         return cleaningProductRepository.getAll();
@@ -74,4 +82,37 @@ public class CleaningProductService {
         }).orElse(false);
         return aboolean;
     }
+
+    //Reto 5
+    public List<CleaningProduct> gadgetsByPrice(double price) {
+        return cleaningProductRepository.getByPrice(price);
+    }
+
+    public List<CleaningProduct> gadgetsByCategory(String category) {
+        return cleaningProductRepository.getByCategory(category);
+    }
+
+    public List<CleaningProduct> gadgetsByName(String name) {
+        return cleaningProductRepository.getByName(name);
+    }
+
+    public List<String> getAllCategories() {
+        List<String> categoryList = new ArrayList<>();
+        MongoCollection mongoCollection = mongoTemplate.getCollection("gadgets");
+        DistinctIterable distinctIterable = mongoCollection.distinct("category", String.class);
+        MongoCursor cursor = distinctIterable.iterator();
+        while (cursor.hasNext()) {
+            String category = (String) cursor.next();
+            categoryList.add(category);
+        }
+
+        return categoryList;
+    }
+
+    //Reto 5
+    public List<CleaningProduct> findByDescriptionLike(String description) {
+        return cleaningProductRepository.findByDescriptionLike(description);
+    }
+
+
 }
